@@ -77,6 +77,16 @@
         .btn-delete:hover {
             background-color: #343a40; /* Уште потемна сива за hover ефект */
         }
+
+        .btn-filter {
+            background-color: #6c757d; /* Сива боја за Filter копчето */
+            border: none;
+            color: #ffffff;
+        }
+
+        .btn-filter:hover {
+            background-color: #5a6268; /* Потемна сива боја за hover */
+        }
     </style>
 </head>
 <body>
@@ -91,6 +101,9 @@
             All Songs
         </div>
         <div class="card-body">
+            <!-- Error message -->
+            <div th:if="${hasError}" class="text-danger mb-3" th:text="${error}"></div>
+
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -126,12 +139,68 @@
                 </tbody>
             </table>
 
+            <!-- Form for the Select button -->
             <form id="selectSongForm" th:action="@{/songs/submit}" th:method="post">
                 <div class="d-flex justify-content-between">
                     <a th:href="@{/songs/add-form}" class="btn btn-add">Add New Song</a>
                     <button type="submit" class="btn btn-select">Select</button>
                 </div>
             </form>
+
+            <!-- Filter Songs by Album -->
+            <div class="mt-4">
+                <h3>Filter Songs by Album</h3>
+                <form th:action="@{/songs}" method="get">
+                    <div class="form-group">
+                        <label for="albumSelect">Select Album</label>
+                        <select id="albumSelect" name="albumId" class="form-control">
+                            <option th:each="album : ${albums}"
+                                    th:value="${album.id}"
+                                    th:text="${album.name}"
+                                    th:selected="${album.id == selectedAlbumId}">
+                                Select Album
+                            </option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-filter">Filter</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Filtered Songs -->
+            <div th:if="${selectedAlbumId != null}" class="mt-4">
+                <h3>Filtered Songs:</h3>
+
+                <!-- Message if no songs are found -->
+                <div th:if="${filteredSongs == null || filteredSongs.isEmpty()}">
+                    <p class="text-danger">No songs found for the selected album.</p>
+                </div>
+
+                <!-- Table if songs are found -->
+                <div th:if="${filteredSongs != null && !filteredSongs.isEmpty()}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Track ID</th>
+                            <th>Title</th>
+                            <th>Genre</th>
+                            <th>Release Year</th>
+                            <th>Album</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="song : ${filteredSongs}">
+                            <td th:text="${song.trackId}"></td>
+                            <td th:text="${song.title}"></td>
+                            <td th:text="${song.genre}"></td>
+                            <td th:text="${song.releaseYear}"></td>
+                            <td th:text="${song.album.name}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </main>

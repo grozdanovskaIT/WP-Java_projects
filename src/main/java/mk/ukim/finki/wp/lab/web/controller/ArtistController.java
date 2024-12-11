@@ -1,6 +1,5 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.service.ArtistService;
@@ -36,11 +35,10 @@ public class ArtistController {
     }
 
     @PostMapping
-    protected String addArtist(HttpServletRequest request){
+    protected String addArtist(HttpServletRequest request, Model model){
         long id = Long.parseLong(request.getParameter("artistId"));
         Artist artist = artistService.findById(id);
         request.getSession().setAttribute("selectedArtist",artist);
         return "redirect:/songDetails";
-
     }
 }

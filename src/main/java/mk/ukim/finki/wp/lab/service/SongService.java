@@ -1,5 +1,4 @@
 package mk.ukim.finki.wp.lab.service;
-
 import mk.ukim.finki.wp.lab.model.Artist;
 import mk.ukim.finki.wp.lab.model.Song;
 
@@ -14,4 +13,7 @@ public interface SongService {
     public List<Song> searchByTitle(String title);
     public Optional<Song> findById(Long id);
     void deleteById(Long id);
+    public Integer songViews(Long id);
+    public List<Song> findByAlbumId(Long albumId);
+
 }

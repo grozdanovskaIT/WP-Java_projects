@@ -1,4 +1,5 @@
 package mk.ukim.finki.wp.lab.web.controller;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +32,9 @@ public class SongDetailsController {
         if(!song.getPerformers().contains(selectedArtist)) {
             songService.addArtistToSong(selectedArtist, song);
         }
+
+        Integer views = songService.songViews(song.getId());
+        model.addAttribute("views", views);
 
         model.addAttribute("songTitle", song.getTitle());
         model.addAttribute("songGenre", song.getGenre());
